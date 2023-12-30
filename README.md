@@ -2,4 +2,5 @@
 ## TABLE
   -> only user model is required here 
   ### User(Name) ->Email,Password(with validation)
+  -> as we cant store password directly in our db so
 /
