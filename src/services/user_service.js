@@ -31,7 +31,7 @@ class userService {
              throw {error:'incorrect password'}
          }
          //3.if password matches than create a token and send it to the corresponding user and this token will b used for his verification in any task
-         const newJwt = this.createToken({email:user.email,id:user.id});
+         const newJwt = this.createToken({email:user.email,id:user.id});//plain js fun
          return newJwt;
       }
       catch(error){
@@ -43,6 +43,25 @@ class userService {
      
 
      //isauthintected
+      async isAuthenticated(token) {
+        try{
+           const verify = this.verifyToken(token);
+           if(!verify){
+            throw {error:'invalid token'}
+           }
+           //after verification of user token check user exist in db becz if user deleted his account before expiry of token than they cant have access
+           const user  = this.userRepository.getbyId(verify.id);
+           if(!user){
+            throw {error:'no user with this id'}
+           }
+           return user.id;//save this in incoming req
+
+        }
+        catch(error){
+            console.log("something wrong in the auth process");
+            throw error;
+        }
+           }
     //create token
      createToken(user) {
         try{
@@ -58,13 +77,15 @@ class userService {
      }
      //verify token
      verifyToken(token){
+       try{
         const response = jwt.verify(token,JWT_KEY);
         return response;
-     }
+       }
      catch(error){
         console.log("something wrong in the token validation");
         throw error;
     }
+}
 
     checkPassword(userippswd,encpswd){
         try{

@@ -44,7 +44,30 @@ const userService = new UserService();
         });
     }
  }
+
+ const isAuthenticated = async(req,res) => {
+   try{
+          const token = req.headers['x-access-token'];//from frontend of user
+          const result=userService.verifyToken(token);
+          return res.status(200).json({
+            message:'user is authenticated and token is valid',
+            data:result,
+            success:true,
+            err:{}
+          })
+   }
+   catch(error){
+    console.log(error);
+    return res.status(500).json({
+        message:'something wrong in authenicated',
+        data:{},
+        success:false,
+        err:error
+    });
+}
+ }
  module.exports = {
   create,
   signIn,
+  isAuthenticated
  }
