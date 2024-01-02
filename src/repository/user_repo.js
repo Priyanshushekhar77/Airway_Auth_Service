@@ -38,6 +38,18 @@ class userRepository {
             throw error;
         }
     }
+    async getByEmail(userEmail){
+        try{
+            const user = await User.findOne({where:{email:userEmail
+            }});
+            return user;
+        }
+        catch(error){
+            console.log("something wrong in the repository layer");
+            throw error;
+        }
+
+    }
 
 
 }

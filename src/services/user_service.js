@@ -1,6 +1,8 @@
 const UserRepository = require('../repository/user_repo'); 
 const jwt = require('jsonwebtoken');
-const {JWT_KEY} = require('../config/serveconfig');
+const bcrypt = require('bcrypt')
+// const {JWT_KEY} = require('../config/serverconfig');
+const JWT_KEY ="PRINCE"
 
 class userService {
      constructor(){
@@ -17,10 +19,35 @@ class userService {
             throw error;
         }
      }
+     //signin
+     async signIn(email,plnpassword){
+       try{
+         //1. fetch the user from the corresponsing email
+         const user = await this.userRepository.getByEmail(email);
+         //2.compase incoming password with db pswd
+         const pswdmatch = this.checkPassword(plnpassword,user.password);
+         if(!pswdmatch){
+             console.log("password doesnot match");
+             throw {error:'incorrect password'}
+         }
+         //3.if password matches than create a token and send it to the corresponding user and this token will b used for his verification in any task
+         const newJwt = this.createToken({email:user.email,id:user.id});
+         return newJwt;
+      }
+      catch(error){
+        console.log("something wrong in the signin process");
+        throw error;
+    }
+       }
 
+     
+
+     //isauthintected
+    //create token
      createToken(user) {
         try{
             const result = jwt.sign(user,JWT_KEY,{expiresIn:'1h'})
+            return result;
 
 
         }
@@ -29,6 +56,7 @@ class userService {
             throw error;
         }
      }
+     //verify token
      verifyToken(token){
         const response = jwt.verify(token,JWT_KEY);
         return response;
@@ -36,6 +64,25 @@ class userService {
      catch(error){
         console.log("something wrong in the token validation");
         throw error;
+    }
+
+    checkPassword(userippswd,encpswd){
+        try{
+            return bcrypt.compareSync(userippswd,encpswd)
+        }
+        catch(error){
+            console.log("something wrong in the cgeck password");
+            throw error;
+        }
+    }
+    isAdmin(userId) {
+        try{
+            return this.userRepository.isAdmin(userId);
+        }
+        catch(error){
+            console.log("something wrong in the service layer");
+            throw error;
+        }
     }
 }
 module.exports = userService
