@@ -105,5 +105,14 @@ class userService {
             throw error;
         }
     }
+    isCustomer(userId) {
+        try{
+            return this.userRepository.isCustomer(userId);
+        }
+        catch(error){
+            console.log("something wrong in the service layer");
+            throw error;
+        }
+    }
 }
 module.exports = userService

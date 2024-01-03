@@ -51,6 +51,39 @@ class userRepository {
 
     }
 
+    async isAdmin(userId){
+        try{
+             const user = await User.findByPk(userId);
+             const adminrole = await Role.find({
+                where:{
+                    name:'ADMIN'
+                }
+             });
+             return user.hasRole(adminrole);
+
+        }
+        catch(error){
+            console.log("something wrong in the repository layer");
+            throw error;
+        }
+    }
+    async isCustomer(userId){
+        try{
+             const user = await User.findByPk(userId);
+             const role = await Role.find({
+                where:{
+                    name:'CUSTOMER'
+                }
+             });
+             return user.hasRole(role);
+
+        }
+        catch(error){
+            console.log("something wrong in the repository layer");
+            throw error;
+        }
+    }
+
 
 }
 

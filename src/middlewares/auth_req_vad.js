@@ -9,8 +9,20 @@ const validateUsersAuth = (req,res,next)=> {
     }
     next();
 }
+const roleVerification = (req,res,next)=> {
+    if(!req.body.id) {
+        return res.status(400).json({
+                message:'something went wrong',
+                data:{},
+                success:false,
+                err:'userid not given'
+        });
+    }
+    next();
+}
 
 
 module.exports = {
-    validateUsersAuth
+    validateUsersAuth,
+    roleVerification
 }

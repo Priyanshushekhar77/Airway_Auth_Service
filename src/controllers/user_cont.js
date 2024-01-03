@@ -66,8 +66,57 @@ const userService = new UserService();
     });
 }
  }
+
+ const isAdmin = async(req,res) => {
+    try{
+        const response = await userService.isAdmin(req.body.id);
+        return res.status(200).json({
+            message:'sucessfully admin verification done',
+            data:response,
+            success:true,
+            err:{}
+        })
+
+    }
+    catch(error){
+        console.log(error);
+        return res.status(500).json({
+            message:'something wrong in authenicated',
+            data:{},
+            success:false,
+            err:error
+        });
+    }
+}
+   
+
+    const isCustomer = async(req,res) => {
+        try{
+            const response = await userService.isCustomer(req.body.id);
+            return res.status(200).json({
+                message:'sucessfully customer verification done',
+                data:response,
+                success:true,
+                err:{}
+            })
+    
+        }
+        catch(error){
+            console.log(error);
+            return res.status(500).json({
+                message:'something wrong in authenicated',
+                data:{},
+                success:false,
+                err:error
+            });
+        }
+    }
+
+ 
  module.exports = {
   create,
   signIn,
-  isAuthenticated
+  isAuthenticated,
+  isAdmin,
+  isCustomer
  }
