@@ -1,4 +1,4 @@
-/AUTH SERVICE IMPLEMENTATION FOR SKYWAY 
+/AUTH SERVICE IMPLEMENTATION FOR AIRWAY 
 ## TABLE
   -> only two model is required here (authentication,authorisation)
   ### User(Name) ->Email,Password(with validation)
